@@ -15,9 +15,15 @@ import it.unipd.dei.sivorleon.simon.ui.theme.SimonTheme
 
 class MainActivity : ComponentActivity() {
     var gameHistory : String = ""
-
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (savedInstanceState != null) {
+            val strValue = savedInstanceState.getString("history")
+            if (strValue != null) gameHistory = strValue
+        }
+
         enableEdgeToEdge()
 
         setContent {
@@ -49,6 +55,17 @@ class MainActivity : ComponentActivity() {
     }
 
     fun saveGame(game: String) {
-        gameHistory += game + "\n"
+        if (game == "") {
+            gameHistory += "0\n"
+        } else {
+            gameHistory += game + "\n"
+        }
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle)
+    {
+        super.onSaveInstanceState(outState)
+        outState.putString("history", gameHistory)
     }
 }
