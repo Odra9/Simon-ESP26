@@ -120,7 +120,7 @@ fun Game(onEndGame: (String) -> Unit) {
 
     if (orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column() {
-            ColorGrid(Modifier.fillMaxWidth().fillMaxHeight(0.5f).padding(top = 16.dp))
+            ColorGrid(Modifier.fillMaxWidth().fillMaxHeight(0.5f).padding(top = 64.dp))
 
             TextButtons()
         }
