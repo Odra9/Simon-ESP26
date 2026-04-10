@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -104,13 +105,15 @@ fun Game(onEndGame: (String) -> Unit) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { currGame = ""}
+                    onClick = { currGame = ""},
+                    Modifier.width(128.dp)
                 ) {
                     Text(text = "Cancella")
                 }
 
                 Button(
-                    onClick = { onEndGame(currGame); currGame = "" }
+                    onClick = { onEndGame(currGame); currGame = "" },
+                    Modifier.width(128.dp)
                 ) {
                     Text(text = "Fine Partita")
                 }
