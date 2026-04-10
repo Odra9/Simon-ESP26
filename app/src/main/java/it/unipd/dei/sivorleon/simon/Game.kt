@@ -28,6 +28,14 @@ import it.unipd.dei.sivorleon.simon.ui.theme.Red
 fun Game(onEndGame: (String) -> Unit) {
     var currGame by rememberSaveable { mutableStateOf("") }
 
+    fun addToGame(code: String) {
+        if (currGame == "") {
+            currGame = code
+        } else {
+            currGame += ", $code"
+        }
+    }
+
     Column() {
         Column() {
             Row(
@@ -38,17 +46,13 @@ fun Game(onEndGame: (String) -> Unit) {
                     modifier = Modifier
                         .size(width = 100.dp, height = 100.dp)
                         .background(Red)
-                        .clickable {
-                            currGame += "R "
-                        }
+                        .clickable { addToGame("R") }
                 )
                 Box(
                     modifier = Modifier
                         .size(width = 100.dp, height = 100.dp)
                         .background(Green)
-                        .clickable {
-                            currGame += "G "
-                        }
+                        .clickable { addToGame("G") }
                 )
             }
 
@@ -76,7 +80,7 @@ fun Game(onEndGame: (String) -> Unit) {
                 Text(text = "Cancella")
             }
 
-            Button(onClick = { onEndGame(currGame) }) {
+            Button(onClick = { onEndGame(currGame); currGame = "" }) {
                 Text(text = "Fine Partita")
             }
         }
