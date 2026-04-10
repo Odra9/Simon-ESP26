@@ -25,8 +25,8 @@ import it.unipd.dei.sivorleon.simon.ui.theme.Green
 import it.unipd.dei.sivorleon.simon.ui.theme.Red
 
 @Composable
-fun Game(onEndGame: () -> Unit) {
-    var curr_game by rememberSaveable { mutableStateOf("") }
+fun Game(onEndGame: (String) -> Unit) {
+    var currGame by rememberSaveable { mutableStateOf("") }
 
     Column() {
         Column() {
@@ -39,7 +39,7 @@ fun Game(onEndGame: () -> Unit) {
                         .size(width = 100.dp, height = 100.dp)
                         .background(Red)
                         .clickable {
-                            curr_game += "R "
+                            currGame += "R "
                         }
                 )
                 Box(
@@ -47,7 +47,7 @@ fun Game(onEndGame: () -> Unit) {
                         .size(width = 100.dp, height = 100.dp)
                         .background(Green)
                         .clickable {
-                            curr_game += "G "
+                            currGame += "G "
                         }
                 )
             }
@@ -58,7 +58,7 @@ fun Game(onEndGame: () -> Unit) {
         Spacer(modifier = Modifier.height(32.dp))
 
         TextField(
-            value = curr_game,
+            value = currGame,
             onValueChange = {},
             enabled = false,
             modifier = Modifier
@@ -72,11 +72,11 @@ fun Game(onEndGame: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Button(onClick = { curr_game = "" }) {
+            Button(onClick = { currGame = "" }) {
                 Text(text = "Cancella")
             }
 
-            Button(onClick = onEndGame) {
+            Button(onClick = { onEndGame(currGame) }) {
                 Text(text = "Fine Partita")
             }
         }

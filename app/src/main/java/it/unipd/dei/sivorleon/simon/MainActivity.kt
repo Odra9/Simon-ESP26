@@ -14,6 +14,8 @@ import androidx.navigation.compose.rememberNavController
 import it.unipd.dei.sivorleon.simon.ui.theme.SimonTheme
 
 class MainActivity : ComponentActivity() {
+    var gameHistory : String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -29,17 +31,24 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("Game") {
                             Game(
-                                onEndGame = { navController.navigate("Data") }
+                                onEndGame = {currGame ->
+                                    saveGame(currGame)
+                                    navController.navigate("Data")
+                                }
                             )
                         }
                         composable("Data") {
                             MatchData(
-
+                                data = gameHistory
                             )
                         }
                     }
                 }
             }
         }
+    }
+
+    fun saveGame(game: String) {
+        gameHistory += game + "\n"
     }
 }
