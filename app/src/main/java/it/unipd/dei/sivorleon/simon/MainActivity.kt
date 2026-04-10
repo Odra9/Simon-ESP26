@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
                     ) {
                         composable("Game") {
                             Game(
-                                onCancel = {},
                                 onEndGame = { navController.navigate("Data") }
                             )
                         }
