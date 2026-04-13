@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import it.unipd.dei.sivorleon.simon.ui.theme.Blue
 import it.unipd.dei.sivorleon.simon.ui.theme.Cyan
@@ -111,14 +112,14 @@ fun Game(onEndGame: (String) -> Unit) {
                     onClick = { currGame = ""},
                     Modifier.width(128.dp)
                 ) {
-                    Text(text = "Cancella")
+                    Text(text = stringResource(R.string.CancelButton))
                 }
 
                 Button(
                     onClick = { onEndGame(currGame); currGame = "" },
                     Modifier.width(128.dp)
                 ) {
-                    Text(text = "Fine Partita")
+                    Text(text = stringResource(R.string.EndButton))
                 }
             }
         }

@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Simon</string>
+    <string name="app_name" translatable="false">Simon</string>
+    <string name="CancelButton">Cancel</string>
+    <string name="EndButton">End Game</string>
 </resources>
