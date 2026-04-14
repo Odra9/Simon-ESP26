@@ -7,18 +7,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun GameLine(game: String) {
-    val numbersWeight = 0.15f
+    val numbersWeight = 0.10f
 
     var length : Int
     var text : String
 
     if (game == "0") {
         length = 0
-        text = "Empty Game"
+        text = stringResource(R.string.EmptyGame)
     } else if (game == "") {
         return     //EOF
     } else {

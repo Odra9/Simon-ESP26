@@ -2,4 +2,5 @@
     <string name="app_name" translatable="false">Simon</string>
     <string name="CancelButton">Cancel</string>
     <string name="EndButton">End Game</string>
+    <string name="EmptyGame">Empty Game</string>
 </resources>
