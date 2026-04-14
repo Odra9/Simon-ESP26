@@ -12,17 +12,31 @@ import androidx.compose.ui.text.style.TextOverflow
 @Composable
 fun GameLine(game: String) {
     val numbersWeight = 0.15f
+
+    var length : Int
+    var text : String
+
+    if (game == "0") {
+        length = 0
+        text = "Empty Game"
+    } else if (game == "") {
+        return     //EOF
+    } else {
+        length = (game.length/3 + 1)  //coverts char num into tiles num
+        text = game
+    }
+
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
         //Numbers
         Text(
-            text = (game.length/3 + 1).toString(),  //coverts char num into tiles num
+            text = length.toString(),
             modifier = Modifier.weight(numbersWeight)
         )
         //Games
         Text(
-            text = game,
+            text = text,
             modifier = Modifier.weight(1 - numbersWeight),
             overflow = TextOverflow.Ellipsis,
             softWrap = false
