@@ -20,10 +20,8 @@ fun GameLine(game: String) {
     if (game == "0") {
         length = 0
         text = stringResource(R.string.EmptyGame)
-    } else if (game == "") {
-        return     //EOF
     } else {
-        length = (game.length/3 + 1)  //coverts char num into tiles num
+        length = (game.length/3 + 1)  //converts character number into number of squares pressed
         text = game
     }
 
@@ -52,7 +50,7 @@ fun MatchData(data: String) {
     LazyColumn (
         modifier = Modifier.fillMaxSize()
     ) {
-        items(lines.size) {
+        items(lines.size - 1) { //The last element in 'lines' if an EOF
             GameLine(lines[it])
         }
     }
