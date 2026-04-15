@@ -10,10 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 
+private const val NUM_WEIGHT = 0.10f //How much width do the numbers occupy percentage wise
+
 @Composable
 fun GameLine(game: String) {
-    val numbersWeight = 0.10f
-
     var length : Int
     var text : String
 
@@ -31,12 +31,12 @@ fun GameLine(game: String) {
         //Numbers
         Text(
             text = length.toString(),
-            modifier = Modifier.weight(numbersWeight)
+            modifier = Modifier.weight(NUM_WEIGHT)
         )
         //Games
         Text(
             text = text,
-            modifier = Modifier.weight(1 - numbersWeight),
+            modifier = Modifier.weight(1 - NUM_WEIGHT),
             overflow = TextOverflow.Ellipsis,
             softWrap = false
         )
