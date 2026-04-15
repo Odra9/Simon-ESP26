@@ -1,9 +1,9 @@
 package it.unipd.dei.sivorleon.simon
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -49,11 +49,11 @@ fun GameLine(game: String) {
 fun MatchData(data: String) {
     val lines = data.lines()
 
-    Column(
+    LazyColumn (
         modifier = Modifier.fillMaxSize()
     ) {
-        for (l in lines) {
-            GameLine(l)
+        items(lines.size) {
+            GameLine(lines[it])
         }
     }
 }
