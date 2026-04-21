@@ -3,3 +3,11 @@ Progetto intermedio dell’insegnamento “Programmazione di Sistemi Embedded”
 Docente: [Fantozzi Carlo](https://www.dei.unipd.it/~fantozzi/)
 
 Autore: Sivori Leonardo
+
+### Note
+[Consegna](https://github.com/Odra9/Simon-ESP26/blob/main/Consegna.pdf)
+
+#### Dispositivi utilizzati per lo sviluppo
+
+- Emulatore: Pixel 2, Android 16.0, Risoluzione 1080x2400 px, 412 x 915 dpi
+- Dispositivo fisico: Samsung A32, Android 13
