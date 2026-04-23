@@ -6,8 +6,10 @@ junitVersion = "1.3.0"
 espressoCore = "3.7.0"
 lifecycleRuntimeKtx = "2.10.0"
 activityCompose = "1.13.0"
-kotlin = "2.0.21"
+kotlin = "2.3.20"
+#noinspection GradleDependency
 composeBom = "2024.09.00"
+#noinspection GradleDependency
 navigationCompose = "2.9.7"
 
 [libraries]

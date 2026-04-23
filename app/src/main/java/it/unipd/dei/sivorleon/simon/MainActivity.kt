@@ -55,10 +55,10 @@ class MainActivity : ComponentActivity() {
     }
 
     fun saveGame(game: String) {
-        if (game == "") {
-            gameHistory += "0\n"
+        gameHistory += if (game == "") {
+            "0\n"
         } else {
-            gameHistory += game + "\n"
+            game + "\n"
         }
 
     }
