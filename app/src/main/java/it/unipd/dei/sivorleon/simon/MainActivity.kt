@@ -1,5 +1,6 @@
 package it.unipd.dei.sivorleon.simon
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -45,7 +46,15 @@ class MainActivity : ComponentActivity() {
                         }
                         composable("Data") {
                             MatchData(
-                                data = gameHistory
+                                data = gameHistory,
+                                onClickLine = { game ->
+                                    navController.navigate("Inspect/${Uri.encode(game)}")
+                                }
+                            )
+                        }
+                        composable("Inspect/{game}") { backStackEntry ->
+                            MatchInspect(
+                                game = Uri.decode(backStackEntry.arguments?.getString("game"))
                             )
                         }
                     }

@@ -1,5 +1,6 @@
 package it.unipd.dei.sivorleon.simon
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +14,7 @@ import androidx.compose.ui.text.style.TextOverflow
 private const val NUM_WEIGHT = 0.10f //How much width do the numbers occupy percentage wise
 
 @Composable
-fun GameLine(game: String) {
+fun GameLine(game: String, onClick: (String) -> Unit) {
     var length : Int
     var text : String
 
@@ -26,7 +27,7 @@ fun GameLine(game: String) {
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(text) })
     ) {
         //Numbers
         Text(
@@ -44,14 +45,14 @@ fun GameLine(game: String) {
 }
 
 @Composable
-fun MatchData(data: String) {
+fun MatchData(data: String, onClickLine: (String) -> Unit) {
     val lines = data.lines()
 
     LazyColumn (
         modifier = Modifier.fillMaxSize()
     ) {
         items(lines.size - 1) { //The last element in 'lines' if an EOF
-            GameLine(lines[it])
+            GameLine(lines[it], onClickLine)
         }
     }
 }
