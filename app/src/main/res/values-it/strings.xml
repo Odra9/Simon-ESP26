@@ -3,4 +3,6 @@
     <string name="CancelButton">Cancella</string>
     <string name="EndButton">Fine Partita</string>
     <string name="EmptyGame">Partita Nulla</string>
+    <string name="StartButton">Avvia Partita</string>
+    <string name="PauseButton">Pausa</string>
 </resources>

@@ -110,14 +110,21 @@ fun Game(onEndGame: (String) -> Unit) {
             ) {
                 Button(
                     onClick = { currGame = ""},
-                    Modifier.width(128.dp)
+                    Modifier.weight(1f)
                 ) {
-                    Text(text = stringResource(R.string.CancelButton))
+                    Text(text = stringResource(R.string.StartButton))
+                }
+
+                Button(
+                    onClick = { },
+                    Modifier.weight(0.8f, false)
+                ) {
+                    Text(text = stringResource(R.string.PauseButton))
                 }
 
                 Button(
                     onClick = { onEndGame(currGame); currGame = "" },
-                    Modifier.width(128.dp)
+                    Modifier.weight(1f)
                 ) {
                     Text(text = stringResource(R.string.EndButton))
                 }
