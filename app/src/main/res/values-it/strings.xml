@@ -5,4 +5,5 @@
     <string name="EmptyGame">Partita Nulla</string>
     <string name="StartButton">Avvia Partita</string>
     <string name="PauseButton">Pausa</string>
+    <string name="PauseButton_Continue">Riprendi</string>
 </resources>

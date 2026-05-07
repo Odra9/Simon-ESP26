@@ -5,4 +5,5 @@
     <string name="EmptyGame">Empty Game</string>
     <string name="StartButton">Start Game</string>
     <string name="PauseButton">Pause</string>
+    <string name="PauseButton_Continue">Continue</string>
 </resources>

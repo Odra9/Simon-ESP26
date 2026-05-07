@@ -1,6 +1,7 @@
 package it.unipd.dei.sivorleon.simon
 
 import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseInOutQuint
 import androidx.compose.animation.core.TweenSpec
@@ -41,16 +42,6 @@ import it.unipd.dei.sivorleon.simon.ui.theme.Yellow
 fun Game(onEndGame: (String) -> Unit) {
     val orientation = LocalConfiguration.current.orientation
 
-    var currGame by rememberSaveable { mutableStateOf("") }
-
-    fun addToGame(code: String) {
-        if (currGame == "") {
-            currGame = code
-        } else {
-            currGame += ", $code"
-        }
-    }
-
     val colors = listOf(Red, Green, Blue, Magenta, Yellow, Cyan)
 
     val animateColor = buildMap {
@@ -58,6 +49,10 @@ fun Game(onEndGame: (String) -> Unit) {
             put(color, remember { mutableStateOf(false) })
         }
     }
+
+    var isGameActive by rememberSaveable { mutableStateOf(false) }
+    var isStartGameEnabled by rememberSaveable { mutableStateOf(true) }
+    var isGamePaused by rememberSaveable { mutableStateOf(false) }
 
 
     @Composable
@@ -72,9 +67,6 @@ fun Game(onEndGame: (String) -> Unit) {
                 .size(100.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(colorAnimation)
-                .clickable {
-                    animateColor.getValue(color).value = true
-                }
         )
     }
 
@@ -104,7 +96,7 @@ fun Game(onEndGame: (String) -> Unit) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             TextField(
-                value = currGame,
+                value = "",
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier
@@ -117,22 +109,41 @@ fun Game(onEndGame: (String) -> Unit) {
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 Button(
-                    onClick = { currGame = ""},
-                    Modifier.weight(1f)
+                    enabled = isStartGameEnabled,
+                    onClick = {
+                        isGameActive = true
+                        isStartGameEnabled = false
+                    },
+                    modifier = Modifier.weight(1f, false)
                 ) {
                     Text(text = stringResource(R.string.StartButton))
                 }
 
                 Button(
-                    onClick = { },
-                    Modifier.weight(0.8f, false)
+                    enabled = isGameActive,
+                    onClick = {
+                        isGamePaused = !isGamePaused
+                    },
+                    modifier = Modifier.weight(0.8f, false)
                 ) {
-                    Text(text = stringResource(R.string.PauseButton))
+                    Text(
+                        text = (
+                            if (isGamePaused) {
+                                stringResource(R.string.PauseButton_Continue)
+                            } else {
+                                stringResource(R.string.PauseButton)
+                            }
+                        )
+                    )
                 }
 
                 Button(
-                    onClick = { onEndGame(currGame); currGame = "" },
-                    Modifier.weight(1f)
+                    enabled = isGameActive,
+                    onClick = {
+                        isGameActive = false
+                        isStartGameEnabled = true
+                    },
+                    modifier = Modifier.weight(1f, false)
                 ) {
                     Text(text = stringResource(R.string.EndButton))
                 }
