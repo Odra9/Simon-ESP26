@@ -1,6 +1,9 @@
 package it.unipd.dei.sivorleon.simon
 
 import android.content.res.Configuration
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.EaseInOutQuint
+import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
@@ -19,6 +21,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -48,14 +51,30 @@ fun Game(onEndGame: (String) -> Unit) {
         }
     }
 
+    val colors = listOf(Red, Green, Blue, Magenta, Yellow, Cyan)
+
+    val animateColor = buildMap {
+        for (color in colors) {
+            put(color, remember { mutableStateOf(false) })
+        }
+    }
+
+
     @Composable
-    fun ColorElement(color: Color, code: String) {
+    fun ColorElement(color: Color) {
+        val colorAnimation: Color by animateColorAsState(
+            targetValue = if (!animateColor.getValue(color).value) color else Color.White,
+            animationSpec = TweenSpec(durationMillis = 500, easing = EaseInOutQuint),
+            label = "alpha", finishedListener = {animateColor.getValue(color).value = false})
+
         Box(
             modifier = Modifier
                 .size(100.dp)
                 .clip(RoundedCornerShape(16.dp))
-                .background(color)
-                .clickable { addToGame(code) }
+                .background(colorAnimation)
+                .clickable {
+                    animateColor.getValue(color).value = true
+                }
         )
     }
 
@@ -65,26 +84,15 @@ fun Game(onEndGame: (String) -> Unit) {
             modifier = modCol,
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                ColorElement(Red, "R")
-                ColorElement(Green, "G")
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                ColorElement(Blue, "B")
-                ColorElement(Magenta, "M")
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
-            ) {
-                ColorElement(Yellow, "Y")
-                ColorElement(Cyan, "C")
+            repeat(3) { i ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceEvenly
+                ) {
+                    repeat(2) { j ->
+                        ColorElement(colors[2*i + j])
+                    }
+                }
             }
         }
     }
