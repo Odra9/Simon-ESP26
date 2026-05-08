@@ -37,12 +37,7 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("Game") {
-                            Game(
-                                onEndGame = {currGame ->
-                                    saveGame(currGame)
-                                    navController.navigate("Data")
-                                }
-                            )
+                            Game()
                         }
                         composable("Data") {
                             MatchData(
