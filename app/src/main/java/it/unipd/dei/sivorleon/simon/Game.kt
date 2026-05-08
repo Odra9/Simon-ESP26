@@ -6,7 +6,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseInOutQuint
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -50,10 +51,8 @@ fun Game(onEndGame: (String) -> Unit) {
         }
     }
 
-    var isGameActive by rememberSaveable { mutableStateOf(false) }
     var isStartGameEnabled by rememberSaveable { mutableStateOf(true) }
-    var isGamePaused by rememberSaveable { mutableStateOf(false) }
-
+    val controller = rememberSaveable (saver = GameController.Saver) { GameController() }
 
     @Composable
     fun ColorElement(color: Color) {
@@ -111,7 +110,7 @@ fun Game(onEndGame: (String) -> Unit) {
                 Button(
                     enabled = isStartGameEnabled,
                     onClick = {
-                        isGameActive = true
+                        controller.startGame()
                         isStartGameEnabled = false
                     },
                     modifier = Modifier.weight(1f, false)
@@ -120,15 +119,16 @@ fun Game(onEndGame: (String) -> Unit) {
                 }
 
                 Button(
-                    enabled = isGameActive,
+                    enabled = controller.isGameActive,
                     onClick = {
-                        isGamePaused = !isGamePaused
+                        controller.pauseGame()
+                        Log.d(null, controller.isGamePaused.toString())
                     },
                     modifier = Modifier.weight(0.8f, false)
                 ) {
                     Text(
                         text = (
-                            if (isGamePaused) {
+                            if (controller.isGamePaused) {
                                 stringResource(R.string.PauseButton_Continue)
                             } else {
                                 stringResource(R.string.PauseButton)
@@ -138,9 +138,9 @@ fun Game(onEndGame: (String) -> Unit) {
                 }
 
                 Button(
-                    enabled = isGameActive,
+                    enabled = controller.isGameActive,
                     onClick = {
-                        isGameActive = false
+                        controller.endGame()
                         isStartGameEnabled = true
                     },
                     modifier = Modifier.weight(1f, false)
@@ -153,15 +153,61 @@ fun Game(onEndGame: (String) -> Unit) {
 
     if (orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column {
-            ColorGrid(Modifier.fillMaxWidth().fillMaxHeight(0.6f).padding(top = 64.dp))
+            ColorGrid(Modifier
+                .fillMaxWidth()
+                .fillMaxHeight(0.6f)
+                .padding(top = 64.dp))
 
             TextButtons()
         }
     } else {
         Row {
-            ColorGrid(Modifier.fillMaxWidth(0.5f).fillMaxHeight())
+            ColorGrid(Modifier
+                .fillMaxWidth(0.5f)
+                .fillMaxHeight())
 
             TextButtons()
         }
+    }
+}
+
+//Game Logic will be handled by this class, instantiated in the game composable
+class GameController (
+    var current : String = "", var max : String = "", var errorPos : Int = -1,
+    var isGameActive : Boolean = false, isGamePaused : Boolean = false
+) {
+    //All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
+    var isGamePaused by mutableStateOf(isGamePaused)
+    fun startGame() {
+        isGameActive = true
+    }
+
+    //TO DO
+    fun pauseGame() {
+        if (isGamePaused) {
+            isGamePaused = false
+        } else {
+            isGamePaused = true
+        }
+    }
+
+    fun endGame() {
+        isGameActive = false
+    }
+
+    //the saver companion object is needed in order to instantiate this class with the remember API
+    companion object {
+        val Saver: Saver<GameController, Any> = listSaver(
+            save = { listOf(it.current, it.max, it.errorPos, it.isGameActive, it.isGamePaused) },
+            restore = {
+                GameController(
+                    current = it[0] as String,
+                    max = it[1] as String,
+                    errorPos = it[2] as Int,
+                    isGameActive = it[3] as Boolean,
+                    isGamePaused = it[4] as Boolean
+                )
+            }
+        )
     }
 }
