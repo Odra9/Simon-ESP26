@@ -35,6 +35,5 @@ fun MatchInspect(game: String) {
 @Preview(showBackground = true)
 @Composable
 fun MatchInspectPreview() {
-    // Pass your custom parameter here
     MatchInspect(game = "---------------------------very long game---------------------------------------")
 }
