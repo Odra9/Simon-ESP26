@@ -4,7 +4,13 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -45,12 +51,22 @@ fun GameLine(game: String, onClick: (String) -> Unit) {
 }
 
 @Composable
-fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (String) -> Unit) {
-    LazyColumn (
-        modifier = Modifier.fillMaxSize()
-    ) {
-        items(data.size) {
-            GameLine(data[it]["max"].toString(), onClickLine)
+fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (String) -> Unit, onClickFAB: () -> Unit) {
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onClickFAB
+            ) {
+                Icon(Icons.Filled.Add, "Go to Game Screen")
+            }
+        }
+    ) { innerPadding ->
+        LazyColumn (
+            modifier = Modifier.padding(innerPadding).fillMaxSize()
+        ) {
+            items(data.size) {
+                GameLine(data[it]["max"].toString(), onClickLine)
+            }
         }
     }
 }

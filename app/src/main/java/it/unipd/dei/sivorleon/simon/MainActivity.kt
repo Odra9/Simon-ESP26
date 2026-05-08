@@ -21,7 +21,6 @@ class MainActivity : ComponentActivity() {
 
         fun saveGame(game: Map<String, Any>) {
             gameHistory.add(game)
-            Log.d(null, gameHistory.toString())
         }
     }
     
@@ -47,6 +46,9 @@ class MainActivity : ComponentActivity() {
                                 data = gameHistory,
                                 onClickLine = { game ->
                                     navController.navigate("Inspect/${Uri.encode(game)}")
+                                },
+                                onClickFAB = {
+                                    navController.navigate("Game")
                                 }
                             )
                         }
