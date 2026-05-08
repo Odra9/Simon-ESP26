@@ -45,14 +45,12 @@ fun GameLine(game: String, onClick: (String) -> Unit) {
 }
 
 @Composable
-fun MatchData(data: String, onClickLine: (String) -> Unit) {
-    val lines = data.lines()
-
+fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (String) -> Unit) {
     LazyColumn (
         modifier = Modifier.fillMaxSize()
     ) {
-        items(lines.size - 1) { //The last element in 'lines' if an EOF
-            GameLine(lines[it], onClickLine)
+        items(data.size) {
+            GameLine(data[it]["max"].toString(), onClickLine)
         }
     }
 }

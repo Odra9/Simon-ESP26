@@ -110,7 +110,6 @@ fun Game() {
                     enabled = controller.isGameActive,
                     onClick = {
                         controller.pauseGame()
-                        Log.d(null, controller.isGamePaused.toString())
                     },
                     modifier = Modifier.weight(0.8f, false)
                 ) {

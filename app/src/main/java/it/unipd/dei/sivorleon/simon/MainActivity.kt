@@ -2,6 +2,7 @@ package it.unipd.dei.sivorleon.simon
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -15,15 +16,17 @@ import androidx.navigation.compose.rememberNavController
 import it.unipd.dei.sivorleon.simon.ui.theme.SimonTheme
 
 class MainActivity : ComponentActivity() {
-    var gameHistory : String = ""
+    companion object {
+        var gameHistory : MutableList<Map<String, Any>> = mutableListOf()
+
+        fun saveGame(game: Map<String, Any>) {
+            gameHistory.add(game)
+            Log.d(null, gameHistory.toString())
+        }
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        if (savedInstanceState != null) {
-            val strValue = savedInstanceState.getString("history")
-            if (strValue != null) gameHistory = strValue
-        }
 
         enableEdgeToEdge()
 
@@ -33,7 +36,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     NavHost(
-                        navController = navController, startDestination = "Game",
+                        navController = navController, startDestination = "Data",
                         modifier = Modifier.padding(innerPadding)
                     ) {
                         composable("Game") {
@@ -56,20 +59,5 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-    }
-
-    fun saveGame(game: String) {
-        gameHistory += if (game == "") {
-            "0\n"
-        } else {
-            game + "\n"
-        }
-
-    }
-
-    override fun onSaveInstanceState(outState: Bundle)
-    {
-        super.onSaveInstanceState(outState)
-        outState.putString("history", gameHistory)
     }
 }
