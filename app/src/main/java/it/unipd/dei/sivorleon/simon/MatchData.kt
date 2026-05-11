@@ -14,44 +14,51 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
+import it.unipd.dei.sivorleon.simon.ui.theme.Red
 
 private const val NUM_WEIGHT = 0.10f //How much width do the numbers occupy percentage wise
 
 @Composable
-fun GameLine(game: String, onClick: (String) -> Unit) {
-    var length : Int
-    var text : String
-
-    if (game == "0") {
-        length = 0
-        text = stringResource(R.string.EmptyGame)
-    } else {
-        length = (game.length/3 + 1)  //converts character number into number of squares pressed
-        text = game
-    }
-
+fun GameLine(game: Map<String, Any>, onClick: (Map<String, Any>) -> Unit) {
     Row(
-        modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(text) })
+        modifier = Modifier.fillMaxWidth().clickable(onClick = { onClick(game) })
     ) {
-        //Numbers
+        //Number
         Text(
-            text = length.toString(),
+            text = game["max"].toString().length.toString(),
             modifier = Modifier.weight(NUM_WEIGHT)
         )
-        //Games
-        Text(
-            text = text,
-            modifier = Modifier.weight(1 - NUM_WEIGHT),
-            overflow = TextOverflow.Ellipsis,
-            softWrap = false
-        )
+        //Text
+        Row(
+            modifier = Modifier.weight(1 - NUM_WEIGHT)
+        ) {
+            Text(
+                text = game["max"].toString(),
+                overflow = TextOverflow.Ellipsis,
+                softWrap = false
+            )
+
+            Text(
+                text = game["max"].toString(),
+                color = Red,
+                overflow = TextOverflow.Ellipsis,
+                softWrap = false
+            )
+        }
+
     }
 }
 
+@Preview(showBackground = true)
 @Composable
-fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (String) -> Unit, onClickFAB: () -> Unit) {
+fun GameLinePreview() {
+    GameLine(mapOf("max" to "---------------------------very long game---------------------------------------", "errorPos" to 10)) {}
+}
+
+@Composable
+fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (Map<String, Any>) -> Unit, onClickFAB: () -> Unit) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -65,7 +72,7 @@ fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (String) -> Unit
             modifier = Modifier.padding(innerPadding).fillMaxSize()
         ) {
             items(data.size) {
-                GameLine(data[it]["max"].toString(), onClickLine)
+                GameLine(data[it], onClickLine)
             }
         }
     }
