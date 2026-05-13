@@ -50,7 +50,7 @@ fun Game() {
                 .clip(RoundedCornerShape(16.dp))
                 .background(colorAnimation)
                 .clickable(
-                    enabled = isStartGameEnabled,
+                    enabled = !isStartGameEnabled,
                     onClick = { controller.tileClickHandler(index) }
                 )
         )
