@@ -35,7 +35,6 @@ fun Game() {
     val orientation = LocalConfiguration.current.orientation
 
     var isStartGameEnabled by rememberSaveable { mutableStateOf(true) }
-    val controller = rememberSaveable (saver = GameController.Saver) { GameController() }
 
     @Composable
     fun ColorElement(index: Int) {
@@ -50,7 +49,10 @@ fun Game() {
                 .size(100.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(colorAnimation)
-                .clickable(onClick = {})
+                .clickable(
+                    enabled = isStartGameEnabled,
+                    onClick = { controller.tileClickHandler(index) }
+                )
         )
     }
 
@@ -80,7 +82,7 @@ fun Game() {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             TextField(
-                value = controller.current,
+                value = controller.displayText(),
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier

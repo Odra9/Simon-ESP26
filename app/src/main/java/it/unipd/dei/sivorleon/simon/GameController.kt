@@ -2,9 +2,8 @@ package it.unipd.dei.sivorleon.simon
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import it.unipd.dei.sivorleon.simon.ui.theme.Blue
@@ -16,17 +15,17 @@ import it.unipd.dei.sivorleon.simon.ui.theme.Yellow
 import kotlin.random.Random
 
 //Game Logic will be handled by this class, instantiated in the game composable
-class GameController (
-    current : String = "", var sequence : MutableList<Int> = mutableListOf(), var errorPos : Int = -1,
-    var isGameActive : Boolean = false, isGamePaused : Boolean = false
-) {
-    //VARIABLES: All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
-    var current by mutableStateOf(current)
-    var isGamePaused by mutableStateOf(isGamePaused)
+class GameController () {
+    //VARIABLES
+    var sequence : MutableList<Int> = mutableListOf()
+    var isGameActive : Boolean = false
+
+    //All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
+    //Points to the current position in the sequence
+    var pointer by mutableIntStateOf(0)
+    var isGamePaused by mutableStateOf(false)
 
     //ANIMATION
-//  
-
     fun colorStartAnimation(index: Int) : Boolean {
         return tiles[index].animate.value
     }
@@ -50,13 +49,22 @@ class GameController (
     private fun newRandom() {
         val rand = Random.nextInt(tiles.size)
         sequence.add(rand)
-        animateColor(rand)
+        animateSequence()
     }
 
     private fun animateSequence() {
         for (i in sequence) {
             animateColor(i)
             //DELAY
+        }
+    }
+
+    fun tileClickHandler(index: Int) {
+        if (pointer+1 >= sequence.size) {
+            newRandom()
+            pointer = 0
+        } else {
+            pointer += 1
         }
     }
 
@@ -73,22 +81,17 @@ class GameController (
         isGameActive = false
     }
 
-    //SAVER: the saver companion object is needed in order to instantiate this class with the remember API
-    companion object {
-        val Saver: Saver<GameController, Any> = listSaver(
-            save = { listOf(it.current, it.max, it.errorPos, it.isGameActive, it.isGamePaused) },
-            restore = {
-                GameController(
-                    current = it[0] as String,
-                    max = it[1] as String,
-                    errorPos = it[2] as Int,
-                    isGameActive = it[3] as Boolean,
-                    isGamePaused = it[4] as Boolean
-                )
-            }
-        )
+    fun displayText() : String {
+        var ret = ""
+        repeat(pointer) {
+            ret += tiles[sequence[it]].code + ", "
+        }
+
+        return ret.slice(IntRange(0, ret.length - 2))
     }
 }
+val controller = GameController()
+
 class Tile (var code : Char, var color : Color, var animate : MutableState<Boolean> = mutableStateOf(false))
 val tiles = listOf(
     Tile('R', Red),
