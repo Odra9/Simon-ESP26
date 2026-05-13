@@ -38,11 +38,11 @@ fun Game() {
     val controller = rememberSaveable (saver = GameController.Saver) { GameController() }
 
     @Composable
-    fun ColorElement(color: Color) {
+    fun ColorElement(index: Int) {
         val colorAnimation: Color by animateColorAsState(
-            targetValue = if (!controller.colorStartAnimation(color)) color else Color.White,
+            targetValue = if (!controller.colorStartAnimation(index)) tiles[index].color else Color.White,
             animationSpec = TweenSpec(durationMillis = 500, easing = EaseInOutQuint),
-            label = "alpha", finishedListener = { controller.colorAnimationHasEnded(color) }
+            label = "alpha", finishedListener = { controller.colorAnimationHasEnded(index) }
         )
 
         Box(
@@ -66,7 +66,7 @@ fun Game() {
                     horizontalArrangement = Arrangement.SpaceEvenly
                 ) {
                     repeat(2) { j ->
-                        ColorElement(controller.colors[2*i + j])
+                        ColorElement(2*i + j)
                     }
                 }
             }

@@ -1,5 +1,6 @@
 package it.unipd.dei.sivorleon.simon
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.Saver
@@ -16,7 +17,7 @@ import kotlin.random.Random
 
 //Game Logic will be handled by this class, instantiated in the game composable
 class GameController (
-    current : String = "", var max : String = "", var errorPos : Int = -1,
+    current : String = "", var sequence : MutableList<Int> = mutableListOf(), var errorPos : Int = -1,
     var isGameActive : Boolean = false, isGamePaused : Boolean = false
 ) {
     //VARIABLES: All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
@@ -24,25 +25,18 @@ class GameController (
     var isGamePaused by mutableStateOf(isGamePaused)
 
     //ANIMATION
-    val colors = listOf(Red, Green, Blue, Magenta, Yellow, Cyan)
-    val colorCodes = listOf("R", "G", "B", "M", "Y", "C")
+//  
 
-    private val animateColor = buildMap {
-        for (color in colors) {
-            put(color, mutableStateOf(false))
-        }
+    fun colorStartAnimation(index: Int) : Boolean {
+        return tiles[index].animate.value
     }
 
-    fun colorStartAnimation(color: Color) : Boolean {
-        return animateColor[color]!!.value
+    fun colorAnimationHasEnded(index: Int) {
+        tiles[index].animate.value = false
     }
 
-    fun colorAnimationHasEnded(color: Color) {
-        animateColor[color]!!.value = false
-    }
-
-    private fun animateColor(color: Color) {
-        animateColor[color]!!.value = true
+    private fun animateColor(index: Int) {
+        tiles[index].animate.value = true
     }
 
     //GAME LOGIC
@@ -50,13 +44,20 @@ class GameController (
         isGameActive = true
 
         newRandom()
+        animateSequence()
     }
 
     private fun newRandom() {
-        val r = Random.nextInt(colors.size)
-        val newColor = colors[r]
-        max += colorCodes[r]
-        animateColor(newColor)
+        val rand = Random.nextInt(tiles.size)
+        sequence.add(rand)
+        animateColor(rand)
+    }
+
+    private fun animateSequence() {
+        for (i in sequence) {
+            animateColor(i)
+            //DELAY
+        }
     }
 
     //TO DO
@@ -88,3 +89,12 @@ class GameController (
         )
     }
 }
+class Tile (var code : Char, var color : Color, var animate : MutableState<Boolean> = mutableStateOf(false))
+val tiles = listOf(
+    Tile('R', Red),
+    Tile('G', Green),
+    Tile('B', Blue),
+    Tile('M', Magenta),
+    Tile('Y', Yellow),
+    Tile('C', Cyan)
+)
