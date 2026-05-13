@@ -12,17 +12,20 @@ import it.unipd.dei.sivorleon.simon.ui.theme.Green
 import it.unipd.dei.sivorleon.simon.ui.theme.Magenta
 import it.unipd.dei.sivorleon.simon.ui.theme.Red
 import it.unipd.dei.sivorleon.simon.ui.theme.Yellow
+import kotlin.random.Random
 
 //Game Logic will be handled by this class, instantiated in the game composable
 class GameController (
-    var current : String = "", var max : String = "", var errorPos : Int = -1,
+    current : String = "", var max : String = "", var errorPos : Int = -1,
     var isGameActive : Boolean = false, isGamePaused : Boolean = false
 ) {
     //VARIABLES: All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
+    var current by mutableStateOf(current)
     var isGamePaused by mutableStateOf(isGamePaused)
 
     //ANIMATION
     val colors = listOf(Red, Green, Blue, Magenta, Yellow, Cyan)
+    val colorCodes = listOf("R", "G", "B", "M", "Y", "C")
 
     private val animateColor = buildMap {
         for (color in colors) {
@@ -38,13 +41,22 @@ class GameController (
         animateColor[color]!!.value = false
     }
 
-    fun animateColor(color: Color) {
+    private fun animateColor(color: Color) {
         animateColor[color]!!.value = true
     }
 
     //GAME LOGIC
     fun startGame() {
         isGameActive = true
+
+        newRandom()
+    }
+
+    private fun newRandom() {
+        val r = Random.nextInt(colors.size)
+        val newColor = colors[r]
+        max += colorCodes[r]
+        animateColor(newColor)
     }
 
     //TO DO

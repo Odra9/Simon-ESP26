@@ -1,7 +1,6 @@
 package it.unipd.dei.sivorleon.simon
 
 import android.content.res.Configuration
-import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseInOutQuint
 import androidx.compose.animation.core.TweenSpec
@@ -51,9 +50,7 @@ fun Game() {
                 .size(100.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .background(colorAnimation)
-                .clickable(onClick = {
-                    controller.animateColor(color)
-                })
+                .clickable(onClick = {})
         )
     }
 
@@ -83,7 +80,7 @@ fun Game() {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             TextField(
-                value = "",
+                value = controller.current,
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier

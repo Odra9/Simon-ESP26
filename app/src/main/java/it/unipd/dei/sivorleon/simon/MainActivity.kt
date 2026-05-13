@@ -17,7 +17,7 @@ import it.unipd.dei.sivorleon.simon.ui.theme.SimonTheme
 
 class MainActivity : ComponentActivity() {
     companion object {
-        var gameHistory : MutableList<Map<String, Any>> = mutableListOf()
+        var gameHistory : MutableList<Map<String, Any>> = mutableListOf(mapOf("max" to "AAAAAAAAAAAAAAAAA", "errorPos" to 5))
 
         fun saveGame(game: Map<String, Any>) {
             gameHistory.add(game)
@@ -26,6 +26,9 @@ class MainActivity : ComponentActivity() {
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //TEMPORARY SOLUTION
+        var tmp_gamemap : Map<String, Any> = mapOf()
 
         enableEdgeToEdge()
 
@@ -38,24 +41,25 @@ class MainActivity : ComponentActivity() {
                         navController = navController, startDestination = "Data",
                         modifier = Modifier.padding(innerPadding)
                     ) {
-                        composable("Game") {
-                            Game()
-                        }
                         composable("Data") {
                             MatchData(
                                 data = gameHistory,
                                 onClickLine = { game ->
-                                    navController.navigate("Inspect/${Uri.encode(game)}")
+                                    tmp_gamemap = game
+                                    navController.navigate("Inspect")
                                 },
                                 onClickFAB = {
                                     navController.navigate("Game")
                                 }
                             )
                         }
-                        composable("Inspect/{game}") { backStackEntry ->
+                        composable("Inspect") { backStackEntry ->
                             MatchInspect(
-                                game = Uri.decode(backStackEntry.arguments?.getString("game"))
+                                game = tmp_gamemap
                             )
+                        }
+                        composable("Game") {
+                            Game()
                         }
                     }
                 }
