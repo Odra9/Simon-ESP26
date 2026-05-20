@@ -40,7 +40,7 @@ fun Game() {
     fun ColorElement(index: Int) {
         val colorAnimation: Color by animateColorAsState(
             targetValue = if (!controller.colorStartAnimation(index)) tiles[index].color else Color.White,
-            animationSpec = TweenSpec(durationMillis = 500, easing = EaseInOutQuint),
+            animationSpec = TweenSpec(durationMillis = 250, easing = EaseInOutQuint),
             label = "alpha", finishedListener = { controller.colorAnimationHasEnded(index) }
         )
 

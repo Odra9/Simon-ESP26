@@ -12,30 +12,41 @@ import it.unipd.dei.sivorleon.simon.ui.theme.Green
 import it.unipd.dei.sivorleon.simon.ui.theme.Magenta
 import it.unipd.dei.sivorleon.simon.ui.theme.Red
 import it.unipd.dei.sivorleon.simon.ui.theme.Yellow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 //Game Logic will be handled by this class, instantiated in the game composable
 class GameController () {
     //VARIABLES
     var sequence : MutableList<Int> = mutableListOf()
-    var isGameActive : Boolean = false
-
+    val animationDuration : Long = 300
     //All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
     //Points to the current position in the sequence
     var pointer by mutableIntStateOf(0)
     var isGamePaused by mutableStateOf(false)
+    var isGameActive by mutableStateOf(false)
 
     //ANIMATION
     fun colorStartAnimation(index: Int) : Boolean {
         return tiles[index].animate.value
     }
 
+    private fun animateColor(index: Int) {
+        tiles[index].animate.value = true
+    }
+
     fun colorAnimationHasEnded(index: Int) {
         tiles[index].animate.value = false
     }
 
-    private fun animateColor(index: Int) {
-        tiles[index].animate.value = true
+    suspend fun animateSequence() {
+        repeat(sequence.size) {
+            animateColor(sequence[it])
+            delay(2*animationDuration) //using twice the duration prevents overlap
+        }
     }
 
     //GAME LOGIC
@@ -43,28 +54,25 @@ class GameController () {
         isGameActive = true
 
         newRandom()
-        animateSequence()
     }
 
     private fun newRandom() {
         val rand = Random.nextInt(tiles.size)
         sequence.add(rand)
-        animateSequence()
-    }
 
-    private fun animateSequence() {
-        for (i in sequence) {
-            animateColor(i)
-            //DELAY
-        }
+        CoroutineScope(Dispatchers.Main).launch { animateSequence() }
     }
 
     fun tileClickHandler(index: Int) {
-        if (pointer+1 >= sequence.size) {
-            newRandom()
-            pointer = 0
+        if (sequence[pointer] == index) {
+            if (pointer + 1 >= sequence.size) {
+                newRandom()
+                pointer = 0
+            } else {
+                pointer += 1
+            }
         } else {
-            pointer += 1
+            endGame()
         }
     }
 
