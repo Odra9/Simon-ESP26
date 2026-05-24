@@ -1,6 +1,7 @@
 package it.unipd.dei.sivorleon.simon
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.EaseInOutQuint
 import androidx.compose.animation.core.TweenSpec
@@ -31,7 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun Game() {
+fun Game(onEndGame: () -> Unit) {
     val orientation = LocalConfiguration.current.orientation
 
     var isStartGameEnabled by rememberSaveable { mutableStateOf(true) }
@@ -136,6 +137,7 @@ fun Game() {
                     enabled = controller.isGameActive,
                     onClick = {
                         controller.endGame()
+                        onEndGame()
                     },
                     modifier = Modifier.weight(1f, false)
                 ) {
@@ -162,5 +164,10 @@ fun Game() {
 
             TextButtons()
         }
+    }
+
+    BackHandler {
+        controller.endGame()
+        onEndGame()
     }
 }

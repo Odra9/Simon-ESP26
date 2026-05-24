@@ -1,5 +1,6 @@
 package it.unipd.dei.sivorleon.simon
 
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -26,12 +27,25 @@ class GameController () {
     private var animationPointer : Int = 0
     private var userErrorDetected : Boolean = false
     private var hasGameEnded : Boolean = false
+    private var hasGameBeenSaved : Boolean = false
     //All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
     //Points to the current position in the sequence
     private var pointer by mutableIntStateOf(0)
     var isGamePaused by mutableStateOf(false)
     var isGameActive by mutableStateOf(false)
     var isSequenceBeingAnimated by mutableStateOf(false)
+
+    fun resetController() {
+        sequence = mutableListOf()
+        animationPointer = 0
+        userErrorDetected = false
+        hasGameEnded = false
+        hasGameBeenSaved = false
+        pointer = 0
+        isGamePaused = false
+        isGameActive = false
+        isSequenceBeingAnimated = false
+    }
 
     //ANIMATION
     fun colorStartAnimation(index: Int) : Boolean {
@@ -112,6 +126,16 @@ class GameController () {
     fun endGame() {
         hasGameEnded = true
         isGameActive = false
+
+        if (!hasGameBeenSaved) {
+            CoroutineScope(Dispatchers.Main).launch { saveGame() }
+        }
+    }
+
+    //TODO
+    suspend fun saveGame() {
+        Log.v(null, "SAVING GAME")
+        hasGameBeenSaved = true
     }
 
     fun displayTextHandler() : String {
