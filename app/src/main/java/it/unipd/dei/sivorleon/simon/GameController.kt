@@ -21,12 +21,12 @@ import kotlin.random.Random
 //Game Logic will be handled by this class, instantiated in the game composable
 class GameController () {
     //VARIABLES
-    var sequence : MutableList<Int> = mutableListOf()
+    private var sequence : MutableList<Int> = mutableListOf()
     val animationDuration : Long = 300
-    var animationPointer : Int = 0
+    private var animationPointer : Int = 0
     //All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
     //Points to the current position in the sequence
-    var pointer by mutableIntStateOf(0)
+    private var pointer by mutableIntStateOf(0)
     var isGamePaused by mutableStateOf(false)
     var isGameActive by mutableStateOf(false)
     var isSequenceBeingAnimated by mutableStateOf(false)
@@ -50,7 +50,7 @@ class GameController () {
 
         while (
             animationPointer < sequence.size
-            && !isGamePaused
+            && !isGamePaused && isGameActive
         )   {
             animateColor(sequence[animationPointer])
             delay(2*animationDuration) //using twice the duration prevents overlap
