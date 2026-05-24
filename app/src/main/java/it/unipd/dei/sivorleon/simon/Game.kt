@@ -106,7 +106,7 @@ fun Game() {
                 }
 
                 Button(
-                    enabled = controller.isGameActive,
+                    enabled = controller.isSequenceBeingAnimated,
                     onClick = {
                         controller.pauseGame()
                     },

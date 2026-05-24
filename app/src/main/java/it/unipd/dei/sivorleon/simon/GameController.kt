@@ -23,11 +23,14 @@ class GameController () {
     //VARIABLES
     var sequence : MutableList<Int> = mutableListOf()
     val animationDuration : Long = 300
+    var animationPointer : Int = 0
     //All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
     //Points to the current position in the sequence
     var pointer by mutableIntStateOf(0)
     var isGamePaused by mutableStateOf(false)
     var isGameActive by mutableStateOf(false)
+    var isSequenceBeingAnimated by mutableStateOf(false)
+
 
     //ANIMATION
     fun colorStartAnimation(index: Int) : Boolean {
@@ -42,11 +45,24 @@ class GameController () {
         tiles[index].animate.value = false
     }
 
-    suspend fun animateSequence() {
-        repeat(sequence.size) {
-            animateColor(sequence[it])
+    private suspend fun animateSequence() {
+        isSequenceBeingAnimated = true
+
+        while (
+            animationPointer < sequence.size
+            && !isGamePaused
+        )   {
+            animateColor(sequence[animationPointer])
             delay(2*animationDuration) //using twice the duration prevents overlap
+            animationPointer++
         }
+
+        //Check if animation has ended
+        if (animationPointer == sequence.size) {
+            isSequenceBeingAnimated = false
+            animationPointer = 0
+        }
+
     }
 
     //GAME LOGIC
@@ -81,10 +97,11 @@ class GameController () {
         }
     }
 
-    //TO DO
+    //Pause or restart sequence animation
     fun pauseGame() {
-        if (isGamePaused) {
+        if (isGamePaused) { //resume animation
             isGamePaused = false
+            CoroutineScope(Dispatchers.Main).launch { animateSequence() }
         } else {
             isGamePaused = true
         }
