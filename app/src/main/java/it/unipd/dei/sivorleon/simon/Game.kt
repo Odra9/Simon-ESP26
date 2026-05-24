@@ -85,7 +85,13 @@ fun Game() {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             TextField(
-                value = controller.displayText(),
+                value = (
+                    when (val t = controller.displayTextHandler()) {
+                        "ERROR" -> stringResource(R.string.UserErrorDected)
+                        "END" -> stringResource(R.string.UserTerminatedGame)
+                        else -> t
+                    }
+                ),
                 onValueChange = {},
                 enabled = false,
                 modifier = Modifier

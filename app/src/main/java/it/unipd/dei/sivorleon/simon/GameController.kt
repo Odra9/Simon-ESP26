@@ -24,13 +24,14 @@ class GameController () {
     private var sequence : MutableList<Int> = mutableListOf()
     val animationDuration : Long = 300
     private var animationPointer : Int = 0
+    private var userErrorDetected : Boolean = false
+    private var hasGameEnded : Boolean = false
     //All values that, when changed, need to trigger recomposition need to be wrapped with MutableState
     //Points to the current position in the sequence
     private var pointer by mutableIntStateOf(0)
     var isGamePaused by mutableStateOf(false)
     var isGameActive by mutableStateOf(false)
     var isSequenceBeingAnimated by mutableStateOf(false)
-
 
     //ANIMATION
     fun colorStartAnimation(index: Int) : Boolean {
@@ -93,6 +94,7 @@ class GameController () {
                 pointer += 1
             }
         } else {
+            userErrorDetected = false
             endGame()
         }
     }
@@ -108,16 +110,29 @@ class GameController () {
     }
 
     fun endGame() {
+        hasGameEnded = true
         isGameActive = false
     }
 
-    fun displayText() : String {
-        var ret = ""
-        repeat(pointer) {
-            ret += tiles[sequence[it]].code + ", "
-        }
+    fun displayTextHandler() : String {
+        if (isGameActive) {
+            var ret = ""
+            repeat(pointer) {
+                ret += tiles[sequence[it]].code + ", "
+            }
 
-        return ret.slice(IntRange(0, ret.length - 2))
+            return ret.slice(IntRange(0, ret.length - 2))
+        } else {
+            return if (hasGameEnded) {
+                if (userErrorDetected) {
+                    "ERROR"
+                } else {
+                    "END"
+                }
+            } else {
+                ""
+            }
+        }
     }
 }
 val controller = GameController()
