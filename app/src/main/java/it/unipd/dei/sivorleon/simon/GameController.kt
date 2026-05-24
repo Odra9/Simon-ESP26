@@ -127,7 +127,7 @@ class GameController () {
         hasGameEnded = true
         isGameActive = false
 
-        if (!hasGameBeenSaved) {
+        if (!hasGameBeenSaved && sequence.size > 1) {
             CoroutineScope(Dispatchers.Main).launch { saveGame() }
         }
     }
