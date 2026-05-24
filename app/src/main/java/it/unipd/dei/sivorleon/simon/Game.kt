@@ -136,7 +136,6 @@ fun Game() {
                     enabled = controller.isGameActive,
                     onClick = {
                         controller.endGame()
-                        isStartGameEnabled = true
                     },
                     modifier = Modifier.weight(1f, false)
                 ) {
