@@ -64,10 +64,15 @@ class GameController () {
     }
 
     fun tileClickHandler(index: Int) {
+        animateColor(index)
+
         if (sequence[pointer] == index) {
             if (pointer + 1 >= sequence.size) {
-                newRandom()
-                pointer = 0
+                CoroutineScope(Dispatchers.Main).launch {
+                    delay(2*animationDuration)
+                    pointer = 0
+                    newRandom()
+                }
             } else {
                 pointer += 1
             }
