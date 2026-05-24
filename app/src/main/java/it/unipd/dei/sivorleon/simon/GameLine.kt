@@ -78,9 +78,9 @@ fun MatchInspectGameLine(game: Map<String, Any>) {
     GameLine(
         game,
         Modifier.fillMaxSize(),
-        Alignment.CenterVertically,
+        Alignment.Top,
         0.15f,
-        24.sp,
+        28.sp,
         TextOverflow.Clip,
         true
     )
