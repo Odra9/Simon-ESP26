@@ -62,10 +62,10 @@ fun GameLine(
 }
 
 @Composable
-fun MatchDataGameLine(game: Game, onClick: (Int) -> Unit) {
+fun MatchDataGameLine(game: Game, gameIndex: Int, onClick: (Int) -> Unit) {
     GameLine(
         game,
-        Modifier.fillMaxWidth().clickable(onClick = { onClick(game.uid) }),
+        Modifier.fillMaxWidth().clickable(onClick = { onClick(gameIndex) }),
         Alignment.Top,
         0.1f,
         20.sp,

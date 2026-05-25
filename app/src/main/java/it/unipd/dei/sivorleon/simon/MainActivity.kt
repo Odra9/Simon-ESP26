@@ -55,8 +55,8 @@ class MainActivity : ComponentActivity() {
                         composable("Data") {
                             MatchData(
                                 data = gameHistory,
-                                onClickLine = { gameUid ->
-                                    navController.navigate("Inspect/${gameUid}")
+                                onClickLine = { gameIndex ->
+                                    navController.navigate("Inspect/${gameIndex}")
                                 },
                                 onClickFAB = {
                                     controller.resetController()
@@ -64,9 +64,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        composable("Inspect/{game}") { backStackEntry ->
+                        composable("Inspect/{index}") { backStackEntry ->
                             MatchInspect(
-                                game = db!!.gameDao().get(Uri.decode(backStackEntry.arguments?.getString("game")).toInt())
+                                game = gameHistory!![Uri.decode(backStackEntry.arguments?.getString("index")).toInt()]
                             )
                         }
                         composable("Game") {
