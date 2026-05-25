@@ -7,6 +7,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
+import it.unipd.dei.sivorleon.simon.data.Game
 import it.unipd.dei.sivorleon.simon.ui.theme.Blue
 import it.unipd.dei.sivorleon.simon.ui.theme.Cyan
 import it.unipd.dei.sivorleon.simon.ui.theme.Green
@@ -135,6 +136,18 @@ class GameController () {
     //TODO
     suspend fun saveGame() {
         Log.v(null, "SAVING GAME")
+
+        var finalSequence = ""
+        for (i in sequence) {
+            finalSequence += tiles[i].code
+        }
+
+        MainActivity.saveGame(Game(
+            uid = 0,    //autogenerate
+            sequence = finalSequence,
+            errorPos = pointer
+        ))
+
         hasGameBeenSaved = true
     }
 

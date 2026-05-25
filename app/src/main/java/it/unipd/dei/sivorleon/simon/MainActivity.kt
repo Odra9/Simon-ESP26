@@ -1,5 +1,6 @@
 package it.unipd.dei.sivorleon.simon
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,25 +9,37 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import it.unipd.dei.sivorleon.simon.ui.theme.SimonTheme
+import it.unipd.dei.sivorleon.simon.data.*
+import it.unipd.dei.sivorleon.simon.ui.*
+import it.unipd.dei.sivorleon.simon.ui.theme.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     companion object {
-        var gameHistory : MutableList<Map<String, Any>> = mutableListOf(mapOf("max" to "AAAAAAAAAAAAAAAAA", "errorPos" to 5))
+        var db : GameDatabase? = null
+        var gameHistory : MutableList<Game>? = null
 
-        fun saveGame(game: Map<String, Any>) {
-            gameHistory.add(game)
+        private fun populateHistory() {
+            gameHistory = db!!.gameDao().getAll().toMutableList()
+        }
+
+        suspend fun saveGame(game: Game) {
+            gameHistory!!.add(game)
+
+            db!!.gameDao().insert(game)
         }
     }
     
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //TEMPORARY SOLUTION
-        var tmp_gamemap : Map<String, Any> = mapOf()
+        db = GameDatabase.getDatabase(applicationContext)
+        lifecycleScope.launch(Dispatchers.IO){populateHistory()}
 
         enableEdgeToEdge()
 
@@ -42,9 +55,8 @@ class MainActivity : ComponentActivity() {
                         composable("Data") {
                             MatchData(
                                 data = gameHistory,
-                                onClickLine = { game ->
-                                    tmp_gamemap = game
-                                    navController.navigate("Inspect")
+                                onClickLine = { gameUid ->
+                                    navController.navigate("Inspect/${gameUid}")
                                 },
                                 onClickFAB = {
                                     controller.resetController()
@@ -52,9 +64,9 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
-                        composable("Inspect") { backStackEntry ->
+                        composable("Inspect/{game}") { backStackEntry ->
                             MatchInspect(
-                                game = tmp_gamemap
+                                game = db!!.gameDao().get(Uri.decode(backStackEntry.arguments?.getString("game")).toInt())
                             )
                         }
                         composable("Game") {

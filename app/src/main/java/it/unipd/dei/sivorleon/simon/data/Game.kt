@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class Game (
-    @PrimaryKey val uid: Int,
-    @ColumnInfo("sequence") val sequence: String,
-    @ColumnInfo("error_pos") val errorPos: Int
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo val sequence: String,
+    @ColumnInfo val errorPos: Int
 )

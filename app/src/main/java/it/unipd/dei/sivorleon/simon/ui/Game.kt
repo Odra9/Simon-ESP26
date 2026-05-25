@@ -1,4 +1,4 @@
-package it.unipd.dei.sivorleon.simon
+package it.unipd.dei.sivorleon.simon.ui
 
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
@@ -30,6 +30,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unipd.dei.sivorleon.simon.R
+import it.unipd.dei.sivorleon.simon.controller
+import it.unipd.dei.sivorleon.simon.tiles
 
 @Composable
 fun Game(onEndGame: () -> Unit) {

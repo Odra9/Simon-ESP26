@@ -1,4 +1,4 @@
-package it.unipd.dei.sivorleon.simon
+package it.unipd.dei.sivorleon.simon.ui
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,9 +11,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import it.unipd.dei.sivorleon.simon.data.Game
 
 @Composable
-fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (Map<String, Any>) -> Unit, onClickFAB: () -> Unit) {
+fun MatchData(data: MutableList<Game>?, onClickLine: (Int) -> Unit, onClickFAB: () -> Unit) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -26,7 +27,7 @@ fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (Map<String, Any
         LazyColumn (
             modifier = Modifier.padding(innerPadding).fillMaxSize()
         ) {
-            items(data.size) {
+            items(data!!.size) {
                 MatchDataGameLine (
                     data[it],
                     onClickLine
@@ -40,7 +41,7 @@ fun MatchData(data: MutableList<Map<String, Any>>, onClickLine: (Map<String, Any
 @Composable
 fun ClickableGameLinePreview() {
     MatchData(
-        mutableListOf(mapOf("max" to "---------------------------very long game---------------------------------------", "errorPos" to 10)),
+        mutableListOf(Game(0,"---------------------------very long game---------------------------------------", 10)),
         {},
         {}
     )

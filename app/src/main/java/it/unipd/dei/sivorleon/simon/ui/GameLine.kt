@@ -1,4 +1,4 @@
-package it.unipd.dei.sivorleon.simon
+package it.unipd.dei.sivorleon.simon.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -11,11 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
+import it.unipd.dei.sivorleon.simon.data.Game
 import it.unipd.dei.sivorleon.simon.ui.theme.Red
 
 @Composable
 fun GameLine(
-    game: Map<String,Any>,
+    game: Game,
     modifier: Modifier,
     verticalAlignment: Alignment.Vertical,
     numWeight: Float,
@@ -23,10 +24,10 @@ fun GameLine(
     overflow: TextOverflow,
     softWrap: Boolean
 ) {
-    val length = game["max"].toString().length
+    val length = game.sequence.length
 
-    val blackText = game["max"].toString().slice(IntRange(0, (game["errorPos"] as Int) - 1))
-    val redText = game["max"].toString().slice(IntRange(game["errorPos"] as Int, length - 1))
+    val blackText = game.sequence.slice(IntRange(0, (game.errorPos - 1)))
+    val redText = game.sequence.slice(IntRange(game.errorPos, length - 1))
 
     Row(
         modifier = modifier,
@@ -61,10 +62,10 @@ fun GameLine(
 }
 
 @Composable
-fun MatchDataGameLine(game: Map<String, Any>, onClick: (Map<String, Any>) -> Unit) {
+fun MatchDataGameLine(game: Game, onClick: (Int) -> Unit) {
     GameLine(
         game,
-        Modifier.fillMaxWidth().clickable(onClick = { onClick(game) }),
+        Modifier.fillMaxWidth().clickable(onClick = { onClick(game.uid) }),
         Alignment.Top,
         0.1f,
         20.sp,
@@ -74,7 +75,7 @@ fun MatchDataGameLine(game: Map<String, Any>, onClick: (Map<String, Any>) -> Uni
 }
 
 @Composable
-fun MatchInspectGameLine(game: Map<String, Any>) {
+fun MatchInspectGameLine(game: Game) {
     GameLine(
         game,
         Modifier.fillMaxSize(),
