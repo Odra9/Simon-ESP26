@@ -6,6 +6,6 @@
     <string name="StartButton">Start Game</string>
     <string name="PauseButton">Pause</string>
     <string name="PauseButton_Continue">Continue</string>
-    <string name="UserErrorDected">ERROR</string>
+    <string name="UserErrorDetected">ERROR</string>
     <string name="UserTerminatedGame">Game has been ended by User</string>
 </resources>

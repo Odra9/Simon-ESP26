@@ -88,7 +88,7 @@ fun Game(onEndGame: () -> Unit) {
             TextField(
                 value = (
                     when (val t = controller.displayTextHandler()) {
-                        "ERROR" -> stringResource(R.string.UserErrorDected)
+                        "ERROR" -> stringResource(R.string.UserErrorDetected)
                         "END" -> stringResource(R.string.UserTerminatedGame)
                         else -> t
                     }

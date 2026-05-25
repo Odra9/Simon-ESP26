@@ -6,6 +6,6 @@
     <string name="StartButton">Avvia Partita</string>
     <string name="PauseButton">Pausa</string>
     <string name="PauseButton_Continue">Riprendi</string>
-    <string name="UserErrorDected">ERRORE</string>
+    <string name="UserErrorDetected">ERRORE</string>
     <string name="UserTerminatedGame">La partita è stata terminata dall\'utente</string>
 </resources>
