@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Simon</string>
-    <string name="CancelButton">Cancel</string>
     <string name="EndButton">End Game</string>
-    <string name="EmptyGame">Empty Game</string>
     <string name="StartButton">Start Game</string>
     <string name="PauseButton">Pause</string>
     <string name="PauseButton_Continue">Continue</string>
