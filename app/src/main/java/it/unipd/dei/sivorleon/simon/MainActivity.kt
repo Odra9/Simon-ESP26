@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         }
 
         suspend fun saveGame(game: Game) {
-            gameHistory!!.add(game)
+            gameHistory!!.add(0, game) //add as first in list (List is ordered DESC by Game.uid)
 
             db!!.gameDao().insert(game)
         }
