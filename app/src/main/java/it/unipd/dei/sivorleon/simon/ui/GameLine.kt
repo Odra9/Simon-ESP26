@@ -72,10 +72,10 @@ fun GameLine(
 }
 
 @Composable
-fun MatchDataGameLine(game: Game, gameIndex: Int, onClick: (Int) -> Unit) {
+fun MatchDataGameLine(game: Game, onClick: () -> Unit) {
     GameLine(
         game,
-        Modifier.fillMaxWidth().clickable(onClick = { onClick(gameIndex) }),
+        Modifier.fillMaxWidth().clickable(onClick = onClick),
         0.1f,
         20.sp,
         TextOverflow.Ellipsis,
