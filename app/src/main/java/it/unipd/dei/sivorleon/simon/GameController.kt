@@ -110,7 +110,7 @@ class GameController () {
                 pointer += 1
             }
         } else {
-            userErrorDetected = false
+            userErrorDetected = true
             endGame()
         }
     }
@@ -128,6 +128,7 @@ class GameController () {
     fun endGame() {
         hasGameEnded = true
         isGameActive = false
+        isSequenceBeingAnimated = false
 
         if (!hasGameBeenSaved && sequence.size > 1) {
             CoroutineScope(Dispatchers.Main).launch { saveGame() }
