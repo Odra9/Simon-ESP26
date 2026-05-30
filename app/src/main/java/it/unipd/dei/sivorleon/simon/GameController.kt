@@ -54,6 +54,7 @@ class GameController () {
     }
 
     private fun animateColor(index: Int) {
+        AudioController.getController().playTile(index)
         tiles[index].animate.value = true
     }
 
@@ -174,12 +175,12 @@ class GameController () {
 }
 val controller = GameController()
 
-class Tile (var code : Char, var color : Color, var animate : MutableState<Boolean> = mutableStateOf(false))
+class Tile (var code : Char, var color : Color, var tone : Double, var animate : MutableState<Boolean> = mutableStateOf(false))
 val tiles = listOf(
-    Tile('R', Red),
-    Tile('G', Green),
-    Tile('B', Blue),
-    Tile('M', Magenta),
-    Tile('Y', Yellow),
-    Tile('C', Cyan)
+    Tile('R', Red, 261.63),
+    Tile('G', Green, 293.66),
+    Tile('B', Blue, 329.63),
+    Tile('M', Magenta, 349.23),
+    Tile('Y', Yellow, 392.0),
+    Tile('C', Cyan, 440.0)
 )
