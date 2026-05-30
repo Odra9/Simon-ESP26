@@ -109,7 +109,7 @@ class GameController () {
                 pointer += 1
             }
         } else {
-            userErrorDetected = false
+            userErrorDetected = true
             endGame()
         }
     }
