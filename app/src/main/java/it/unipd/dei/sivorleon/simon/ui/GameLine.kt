@@ -8,7 +8,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.sp
 import it.unipd.dei.sivorleon.simon.data.Game
@@ -29,6 +32,13 @@ fun GameLine(
     val blackText = game.sequence.slice(IntRange(0, (game.errorPos - 1)))
     val redText = game.sequence.slice(IntRange(game.errorPos, length - 1))
 
+    val annotatedText = buildAnnotatedString {
+        append(blackText)
+        withStyle(style = SpanStyle(color = Red)) {
+            append(redText)
+        }
+    }
+
     Row(
         modifier = modifier,
         verticalAlignment = verticalAlignment
@@ -40,24 +50,13 @@ fun GameLine(
             fontSize = textSize
         )
         //Text
-        Row(
-            modifier = Modifier.weight(1 - numWeight)
-        ) {
-            Text(
-                text = blackText,
-                fontSize = textSize,
-                overflow = overflow,
-                softWrap = softWrap
-            )
-
-            Text(
-                color = Red,
-                text = redText,
-                fontSize = textSize,
-                overflow = overflow,
-                softWrap = softWrap
-            )
-        }
+        Text(
+            text = annotatedText,
+            modifier = Modifier.weight(1 - numWeight),
+            fontSize = textSize,
+            overflow = overflow,
+            softWrap = softWrap
+        )
     }
 }
 
