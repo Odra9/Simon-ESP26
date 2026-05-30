@@ -173,8 +173,23 @@ class GameController () {
             }
         }
     }
+
+    // Singleton
+    companion object {
+        @Volatile
+        private var INSTANCE: GameController? = null
+
+        fun getController(): GameController {
+            // synchronized prevent multiple threads to create a different Controller instance
+            return INSTANCE ?: synchronized(this) {
+                val instance = GameController()
+                INSTANCE = instance
+                // return instance
+                instance
+            }
+        }
+    }
 }
-val controller = GameController()
 
 class Tile (var code : Char, var color : Color, var tone : Double, var animate : MutableState<Boolean> = mutableStateOf(false))
 val tiles = listOf(

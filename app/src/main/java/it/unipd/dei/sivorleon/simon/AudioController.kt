@@ -10,6 +10,7 @@ class AudioController {
     // Audio settings
     private val sampleRate = 44100
     private val durationInSeconds : Double = (controller.animationDuration.toDouble()/1000)
+    private val durationInSeconds : Double = (GameController.getController().animationDuration.toDouble()/1000)
     private val numSamples : Int = (sampleRate * durationInSeconds).roundToInt()
 
 

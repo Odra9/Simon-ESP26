@@ -59,7 +59,7 @@ class MainActivity : ComponentActivity() {
                                     navController.navigate("Inspect/${gameIndex}")
                                 },
                                 onClickFAB = {
-                                    controller.resetController()
+                                    GameController.getController().resetController()
                                     navController.navigate("Game")
                                 }
                             )

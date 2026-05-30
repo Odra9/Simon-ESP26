@@ -30,13 +30,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import it.unipd.dei.sivorleon.simon.GameController
 import it.unipd.dei.sivorleon.simon.R
-import it.unipd.dei.sivorleon.simon.controller
 import it.unipd.dei.sivorleon.simon.tiles
 
 @Composable
 fun Game(onEndGame: () -> Unit) {
     val orientation = LocalConfiguration.current.orientation
+
+    val controller = GameController.getController()
 
     var isStartGameEnabled by rememberSaveable { mutableStateOf(true) }
 
