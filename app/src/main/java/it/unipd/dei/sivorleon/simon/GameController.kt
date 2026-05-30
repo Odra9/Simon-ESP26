@@ -127,6 +127,7 @@ class GameController () {
     fun endGame() {
         hasGameEnded = true
         isGameActive = false
+        isSequenceBeingAnimated = false
 
         if (!hasGameBeenSaved && sequence.size > 1) {
             CoroutineScope(Dispatchers.Main).launch { saveGame() }
