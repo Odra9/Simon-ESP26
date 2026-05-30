@@ -19,15 +19,35 @@ import it.unipd.dei.sivorleon.simon.ui.theme.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+
+/**
+    The Main and only activity of the application
+ */
 class MainActivity : ComponentActivity() {
     companion object {
+        /**
+            Database Instance
+         */
         var db : GameDatabase? = null
+
+        /**
+         * Local list of all games
+         * Only one read operation is needed from the database for each app execution
+         */
         var gameHistory : MutableList<Game>? = null
 
+        /**
+         * reads all data in the database and loads it into gameHistory
+         */
         private fun populateHistory() {
             gameHistory = db!!.gameDao().getAll().toMutableList()
         }
 
+        /**
+         * Saves a new game to both gameHistory, and the database
+         *
+         * @param[game] New Game
+         */
         suspend fun saveGame(game: Game) {
             gameHistory!!.add(0, game) //add as first in list (List is ordered DESC by Game.uid)
 
@@ -39,6 +59,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         db = GameDatabase.getDatabase(applicationContext)
+        // launch a new thread so the read operation is non blocking
         lifecycleScope.launch(Dispatchers.IO){populateHistory()}
 
         enableEdgeToEdge()
@@ -64,6 +85,7 @@ class MainActivity : ComponentActivity() {
                                 }
                             )
                         }
+                        // MatchData passes the index in gameHistory of the game of interest to MatchInspect
                         composable("Inspect/{index}") { backStackEntry ->
                             MatchInspect(
                                 game = gameHistory!![Uri.decode(backStackEntry.arguments?.getString("index")).toInt()]

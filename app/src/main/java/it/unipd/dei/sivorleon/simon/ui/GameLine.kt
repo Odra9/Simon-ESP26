@@ -17,11 +17,21 @@ import androidx.compose.ui.unit.sp
 import it.unipd.dei.sivorleon.simon.data.Game
 import it.unipd.dei.sivorleon.simon.ui.theme.Red
 
+/**
+ * This composable displays a single game from the database
+ * It gets called with different, personalized params by MatchData and MatchInspect
+ *
+ * @param[game] Game to be displayed on this line
+ * @param[modifier] Row modifier
+ * @param[numWeight] Percentage of horizontal space occupied by the max length of correct sequence
+ * @param[textSize] Text font size
+ * @param[overflow] How should overflowing text appear
+ * @param[softWrap] Should the text wrap around soft line breaks
+ */
 @Composable
 fun GameLine(
     game: Game,
     modifier: Modifier,
-    verticalAlignment: Alignment.Vertical,
     numWeight: Float,
     textSize: TextUnit,
     overflow: TextOverflow,
@@ -29,6 +39,7 @@ fun GameLine(
 ) {
     val length = game.sequence.length
 
+    // The text must display through different colors where the user made the mistake
     val blackText = game.sequence.slice(IntRange(0, (game.errorPos - 1)))
     val redText = game.sequence.slice(IntRange(game.errorPos, length - 1))
 
@@ -41,11 +52,11 @@ fun GameLine(
 
     Row(
         modifier = modifier,
-        verticalAlignment = verticalAlignment
+        verticalAlignment = Alignment.Top
     ) {
         //Number
         Text(
-            text = length.toString(),
+            text = (length - 1).toString(), // The max length of sequence the user correctly played is always 1 less of the current sequence length
             modifier = Modifier.weight(numWeight),
             fontSize = textSize
         )
@@ -65,7 +76,6 @@ fun MatchDataGameLine(game: Game, gameIndex: Int, onClick: (Int) -> Unit) {
     GameLine(
         game,
         Modifier.fillMaxWidth().clickable(onClick = { onClick(gameIndex) }),
-        Alignment.Top,
         0.1f,
         20.sp,
         TextOverflow.Ellipsis,
@@ -78,7 +88,6 @@ fun MatchInspectGameLine(game: Game) {
     GameLine(
         game,
         Modifier.fillMaxSize(),
-        Alignment.Top,
         0.15f,
         28.sp,
         TextOverflow.Clip,

@@ -6,15 +6,18 @@ import android.media.AudioTrack
 import kotlin.math.roundToInt
 import kotlin.math.sin
 
+/**
+ * Singleton Controller to manage UI interactions
+ * Called by GameController
+ */
 class AudioController {
     // Audio settings
-    private val sampleRate = 44100
-    private val durationInSeconds : Double = (controller.animationDuration.toDouble()/1000)
+    private val sampleRate = 44100 // A Higher number leads to more quality but also more memory usage
     private val durationInSeconds : Double = (GameController.getController().animationDuration.toDouble()/1000)
     private val numSamples : Int = (sampleRate * durationInSeconds).roundToInt()
 
 
-    //AudioTrackSingleton
+    // For each sound used in game, a different audioTrack object is created, which holds the values of its sine wave in memory
     private var audioTracks : List<AudioTrack>
 
     init {
@@ -32,9 +35,14 @@ class AudioController {
         // Since it's PCM_16BIT, each sample is 2 bytes (Short)
         val totalSizeInBytes = numSamples * 2
 
-        //Create sounds to save in each AudioTrack object
+        /*
+            Calculate the sine waves to be stored into the audioTrack objects
+            Each sound fades out in the last 50ms to prevent 'popping' audio issues
+        */
+        // Fading to begin 50ms before end of sine wave
         val fadeDuration = (sampleRate * 0.05).toInt()
-        val indexStartFade = numSamples - fadeDuration //Fading to begin 10ms before end of sine wave
+        // sample index at which to start the fade
+        val indexStartFade = numSamples - fadeDuration
         var waves : List<ShortArray> = buildList {
             for (tile in tiles) {
                 val samples = ShortArray(numSamples)
@@ -44,10 +52,13 @@ class AudioController {
                     val time = i.toDouble() / sampleRate
                     val angle = 2.0 * Math.PI * tile.tone * time
 
+                    /*  Linear fade: wave amplitude decreases linearly to zero
+                        Base amplitude is the max amplitude, the integer limit for Short variables
+                     */
                     var amplitude : Double = if (i > indexStartFade) {
-                        Short.MAX_VALUE * (numSamples - i).toDouble() / fadeDuration //linear Fade
+                        Short.MAX_VALUE * (numSamples - i).toDouble() / fadeDuration // linear Fade
                     } else {
-                        Short.MAX_VALUE.toDouble() //max amplitude
+                        Short.MAX_VALUE.toDouble() // max amplitude
                     }
                     samples[i] = (sin(angle) * amplitude).toInt().toShort()
                 }
@@ -56,6 +67,7 @@ class AudioController {
             }
         }
 
+        // generate audioTracks
         audioTracks = buildList {
             for (wave in waves) {
                 val track = AudioTrack.Builder()
@@ -71,21 +83,26 @@ class AudioController {
         }
     }
 
+    /**
+        Play the relative sound for each Tile
+
+        @param[index] Index of Tile
+     */
     fun playTile(index: Int) {
+        // If the audioTrack has been already been use, it needs to be reset before it can be played again
         audioTracks[index].stop()
         audioTracks[index].setPlaybackHeadPosition(0)
+
         audioTracks[index].play()
     }
 
+    // Singleton
     companion object {
-        // Singleton prevents multiple instances of database opening at the
-        // same time.
         @Volatile
         private var INSTANCE: AudioController? = null
 
         fun getController(): AudioController {
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
+            // synchronized prevent multiple threads to create a different Controller instance
             return INSTANCE ?: synchronized(this) {
                 val instance = AudioController()
                 INSTANCE = instance

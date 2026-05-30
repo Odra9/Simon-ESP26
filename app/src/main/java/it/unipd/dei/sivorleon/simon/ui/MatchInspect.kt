@@ -4,6 +4,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import it.unipd.dei.sivorleon.simon.data.Game
 
+/**
+ * Displays a single game from the database
+ *
+ * @param[game] Game to inspect
+ */
 @Composable
 fun MatchInspect(game: Game) {
     MatchInspectGameLine(

@@ -10,20 +10,16 @@ abstract class GameDatabase : RoomDatabase() {
     abstract fun gameDao(): GameDao
 
     companion object {
-        // Singleton prevents multiple instances of database opening at the
-        // same time.
         @Volatile
         private var INSTANCE: GameDatabase? = null
 
         fun getDatabase(context: Context): GameDatabase {
-            // if the INSTANCE is not null, then return it,
-            // if it is, then create the database
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
                                 context.applicationContext,
                                 GameDatabase::class.java,
                                 "game_database"
-                            ).fallbackToDestructiveMigration(true).build()
+                            ).fallbackToDestructiveMigration(true).build()  // if the database version changes, we expect conflict issues so the entire old table gets dropped
                 INSTANCE = instance
                 // return instance
                 instance

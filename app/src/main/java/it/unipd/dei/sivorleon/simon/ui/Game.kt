@@ -34,23 +34,28 @@ import it.unipd.dei.sivorleon.simon.GameController
 import it.unipd.dei.sivorleon.simon.R
 import it.unipd.dei.sivorleon.simon.tiles
 
+/**
+ * Game UI composable
+ */
 @Composable
 fun Game(onEndGame: () -> Unit) {
     val orientation = LocalConfiguration.current.orientation
 
     val controller = GameController.getController()
 
+    // Start button must be enabled only when entering composable
     var isStartGameEnabled by rememberSaveable { mutableStateOf(true) }
 
+    // Tile
     @Composable
     fun ColorElement(index: Int) {
+        // Color transitions to white and back
         val colorAnimation: Color by animateColorAsState(
             targetValue = if (!controller.colorStartAnimation(index)) tiles[index].color else Color.White,
             animationSpec = TweenSpec(
-                durationMillis = controller.animationDuration.toInt()-50,
+                durationMillis = controller.animationDuration.toInt()-50, // 50ms removed to prevent some collisions
                 easing = EaseInOutQuint
-            ),
-            label = "alpha", finishedListener = { controller.colorAnimationHasEnded(index) }
+            ), finishedListener = { controller.colorAnimationHasEnded(index) }
         )
 
         Box(
@@ -65,6 +70,7 @@ fun Game(onEndGame: () -> Unit) {
         )
     }
 
+    // Arrange Tiles in a 3 by 2 grid
     @Composable
     fun ColorGrid(modCol: Modifier) {
         Column(
@@ -91,6 +97,10 @@ fun Game(onEndGame: () -> Unit) {
             verticalArrangement = Arrangement.SpaceEvenly
         ) {
             TextField(
+                /*
+                    If the function return ERROR or END, display the correct Resource string
+                    Otherwise, display the string
+                 */
                 value = (
                     when (val t = controller.displayTextHandler()) {
                         "ERROR" -> stringResource(R.string.UserErrorDetected)
@@ -98,17 +108,19 @@ fun Game(onEndGame: () -> Unit) {
                         else -> t
                     }
                 ),
-                onValueChange = {},
-                enabled = false,
+                onValueChange = {}, // no input is handled directly by this composable, so the function is empty
+                enabled = false,    // disable user input
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(48.dp, 16.dp)
             )
 
+            // Buttons
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+                // Start button
                 Button(
                     enabled = isStartGameEnabled,
                     onClick = {
@@ -120,6 +132,7 @@ fun Game(onEndGame: () -> Unit) {
                     Text(text = stringResource(R.string.StartButton))
                 }
 
+                // Pause button
                 Button(
                     enabled = controller.isSequenceBeingAnimated,
                     onClick = {
@@ -138,6 +151,7 @@ fun Game(onEndGame: () -> Unit) {
                     )
                 }
 
+                // End button
                 Button(
                     enabled = controller.isGameActive,
                     onClick = {
@@ -152,6 +166,7 @@ fun Game(onEndGame: () -> Unit) {
         }
     }
 
+    // Check orientation and display items accordingly
     if (orientation == Configuration.ORIENTATION_PORTRAIT) {
         Column {
             ColorGrid(Modifier
@@ -171,6 +186,7 @@ fun Game(onEndGame: () -> Unit) {
         }
     }
 
+    // What needs to be called when the back button is pressed on the device
     BackHandler {
         controller.endGame()
         onEndGame()

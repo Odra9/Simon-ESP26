@@ -13,6 +13,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import it.unipd.dei.sivorleon.simon.data.Game
 
+/**
+ * The list of Games UI
+ *
+ * @param[data] the entire gameHistory
+ * @param[onClickLine] navController function to be called when a game is inspected. Navigates to MatchInspect composable
+ * @param[onClickFAB] navController function to be called when FAB is clicked. Navigates to Game composable
+ */
 @Composable
 fun MatchData(data: MutableList<Game>?, onClickLine: (Int) -> Unit, onClickFAB: () -> Unit) {
     Scaffold(
