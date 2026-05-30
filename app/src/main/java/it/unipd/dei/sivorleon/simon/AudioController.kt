@@ -18,8 +18,8 @@ class AudioController {
 
     init {
         val audioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_MEDIA)
-            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)    // Usage is UI
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)  // Type is UI
             .build()
 
         val audioFormat = AudioFormat.Builder()
