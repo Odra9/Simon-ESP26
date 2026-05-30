@@ -50,7 +50,7 @@ fun MatchData(data: MutableList<Game>?, onClickLine: (Int) -> Unit, onClickFAB: 
 @Composable
 fun ClickableGameLinePreview() {
     MatchData(
-        mutableListOf(Game(0,"---------------------------very long game---------------------------------------", 10)),
+        mutableListOf(Game(0,"X".repeat(80), 10)),
         {},
         {}
     )
