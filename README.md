@@ -5,7 +5,8 @@ Docente: [Fantozzi Carlo](https://www.dei.unipd.it/~fantozzi/)
 Autore: Sivori Leonardo
 
 ### Note
-[Consegna](https://github.com/Odra9/Simon-ESP26/blob/main/Consegna.pdf)
+[Consegna Progetto Finale](https://github.com/Odra9/Simon-ESP26/blob/main/Consegna_Finale.pdf) \
+[Consegna Progetto Intermedio](https://github.com/Odra9/Simon-ESP26/blob/main/Consegna_Intermedia.pdf)
 
 Progetto realizzato con Compose
 
