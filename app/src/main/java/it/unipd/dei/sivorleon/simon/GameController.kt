@@ -203,10 +203,10 @@ class GameController () {
         if (isGameActive) {
             var ret = ""
             repeat(pointer) {
-                ret += tiles[sequence[it]].code + ", "
+                ret += tiles[sequence[it]].code
             }
 
-            return ret.slice(IntRange(0, ret.length - 2))
+            return ret
         } else {
             /*
                 If the game has ended we need to return a message
