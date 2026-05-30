@@ -12,22 +12,6 @@ class AudioController {
     private val durationInSeconds : Double = (controller.animationDuration.toDouble()/1000)
     private val numSamples : Int = (sampleRate * durationInSeconds).roundToInt()
 
-    //notes
-    //Cache waves
-    private var waves : List<ShortArray> = buildList {
-        for (tile in tiles) {
-            val samples = ShortArray(numSamples)
-
-            //Generate the Sine Wave PCM data
-            for (i in 0 until numSamples) {
-                val time = i.toDouble() / sampleRate
-                val angle = 2.0 * Math.PI * tile.tone * time
-                samples[i] = (sin(angle) * Short.MAX_VALUE).toInt().toShort()
-            }
-
-            add(samples)
-        }
-    }
 
     //AudioTrackSingleton
     private var audioTracks : List<AudioTrack>
@@ -46,6 +30,30 @@ class AudioController {
 
         // Since it's PCM_16BIT, each sample is 2 bytes (Short)
         val totalSizeInBytes = numSamples * 2
+
+        //Create sounds to save in each AudioTrack object
+        val fadeDuration = (sampleRate * 0.05).toInt()
+        val indexStartFade = numSamples - fadeDuration //Fading to begin 10ms before end of sine wave
+        var waves : List<ShortArray> = buildList {
+            for (tile in tiles) {
+                val samples = ShortArray(numSamples)
+
+                //Generate the Sine Wave PCM data
+                for (i in 0 until numSamples) {
+                    val time = i.toDouble() / sampleRate
+                    val angle = 2.0 * Math.PI * tile.tone * time
+
+                    var amplitude : Double = if (i > indexStartFade) {
+                        Short.MAX_VALUE * (numSamples - i).toDouble() / fadeDuration //linear Fade
+                    } else {
+                        Short.MAX_VALUE.toDouble() //max amplitude
+                    }
+                    samples[i] = (sin(angle) * amplitude).toInt().toShort()
+                }
+
+                add(samples)
+            }
+        }
 
         audioTracks = buildList {
             for (wave in waves) {
