@@ -30,12 +30,12 @@ class AudioController {
     }
 
     //AudioTrackSingleton
-    var audioTracks : List<AudioTrack>
+    private var audioTracks : List<AudioTrack>
 
     init {
         val audioAttributes = AudioAttributes.Builder()
             .setUsage(AudioAttributes.USAGE_MEDIA)
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+            .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
             .build()
 
         val audioFormat = AudioFormat.Builder()
