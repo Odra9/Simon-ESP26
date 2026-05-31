@@ -24,7 +24,7 @@ import kotlin.random.Random
  */
 class GameController () {
     // VARIABLES
-    // the current sequence
+    // the current sequence, represent by the list of tile indexes
     private var sequence : MutableList<Int> = mutableListOf()
     /*
         How long does the animation lasts
@@ -102,6 +102,15 @@ class GameController () {
         )   {
             animateColor(sequence[animationPointer])
             delay(2*animationDuration) //using twice the duration prevents overlap
+
+            /*
+                In very rare cases, recomposition could be triggered inside game composable before it could trigger the animation finishedListener
+                To prevent this, we check if colorAnimationHasEnded has been called, and if not, we call it manually
+             */
+            if (colorStartAnimation(sequence[animationPointer])) {
+                colorAnimationHasEnded(sequence[animationPointer])
+            }
+
             animationPointer++
         }
 
