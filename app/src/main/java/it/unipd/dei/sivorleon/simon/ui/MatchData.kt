@@ -38,9 +38,8 @@ fun MatchData(data: MutableList<Game>?, onClickLine: (Int) -> Unit, onClickFAB: 
         ) {
             items(data!!.size) {
                 MatchDataGameLine (
-                    data[it],
-                    { onClickLine(it) }
-                )
+                    data[it]
+                ) { onClickLine(it) }
             }
         }
     }
