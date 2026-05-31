@@ -141,14 +141,14 @@ class GameController () {
         animateColor(index)
 
         if (sequence[pointer] == index) {
-            if (pointer + 1 >= sequence.size) {
+            pointer += 1
+            if (pointer >= sequence.size) {
                 CoroutineScope(Dispatchers.Main).launch {
-                    delay(2*animationDuration) // wait animations to end
+                    // Before extending the sequence, wait for text to display and for all animations to end
+                    delay(2*animationDuration)
                     pointer = 0
                     newRandom()
                 }
-            } else {
-                pointer += 1
             }
         } else {
             userErrorDetected = true    // game has ended due to user error, not user choice
