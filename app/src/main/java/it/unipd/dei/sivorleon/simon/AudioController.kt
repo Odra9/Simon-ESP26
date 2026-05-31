@@ -22,7 +22,13 @@ class AudioController {
 
     init {
         val audioAttributes = AudioAttributes.Builder()
-            .setUsage(AudioAttributes.USAGE_ASSISTANCE_SONIFICATION)    // Usage is UI
+            /*
+                Usage is Game Event
+
+                AudioAttributes.USAGE_ASSISTANCE_SONIFICATION could also be used
+                if muting sounds if phone is on silent mode is desired behaviour
+             */
+            .setUsage(AudioAttributes.USAGE_GAME)
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)  // Type is UI
             .build()
 
