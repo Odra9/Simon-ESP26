@@ -105,7 +105,7 @@ fun Game(onEndGame: () -> Unit) {
                     when (val t = controller.displayTextHandler()) {
                         "ERROR" -> stringResource(R.string.UserErrorDetected)
                         "END" -> stringResource(R.string.UserTerminatedGame)
-                        else -> t
+                        else -> StringWrapper.commaSeparate(t)
                     }
                 ),
                 onValueChange = {}, // no input is handled directly by this composable, so the function is empty

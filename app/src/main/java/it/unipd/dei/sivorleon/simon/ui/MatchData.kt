@@ -32,13 +32,14 @@ fun MatchData(data: MutableList<Game>?, onClickLine: (Int) -> Unit, onClickFAB: 
         }
     ) { innerPadding ->
         LazyColumn (
-            modifier = Modifier.padding(innerPadding).fillMaxSize()
+            modifier = Modifier
+                .padding(innerPadding)
+                .fillMaxSize()
         ) {
             items(data!!.size) {
                 MatchDataGameLine (
                     data[it],
-                    it,
-                    onClickLine
+                    { onClickLine(it) }
                 )
             }
         }
@@ -49,7 +50,7 @@ fun MatchData(data: MutableList<Game>?, onClickLine: (Int) -> Unit, onClickFAB: 
 @Composable
 fun ClickableGameLinePreview() {
     MatchData(
-        mutableListOf(Game(0,"---------------------------very long game---------------------------------------", 10)),
+        mutableListOf(Game(0,"X".repeat(80), 10)),
         {},
         {}
     )

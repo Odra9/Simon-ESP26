@@ -19,5 +19,5 @@ fun MatchInspect(game: Game) {
 @Preview(showBackground = true)
 @Composable
 fun MatchInspectPreview() {
-    MatchInspect(Game(0,"---------------------------very long game---------------------------------------", 10))
+    MatchInspect(Game(0,"X".repeat(80), 10))
 }
