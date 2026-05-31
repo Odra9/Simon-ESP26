@@ -43,6 +43,7 @@ class GameController () {
     var isGamePaused by mutableStateOf(false)
     var isGameActive by mutableStateOf(false)
     var isSequenceBeingAnimated by mutableStateOf(false)
+    var areTilesClickable by mutableStateOf(true)
 
     // Because the controller is created once for every app instance, it needs to be reset between games
     fun resetController() {
@@ -55,6 +56,7 @@ class GameController () {
         isGamePaused = false
         isGameActive = false
         isSequenceBeingAnimated = false
+        areTilesClickable = true
     }
 
     // ANIMATION
@@ -142,6 +144,15 @@ class GameController () {
     }
 
     /**
+     *  Function used by game composable to check if the Tiles should be clickable at this point
+     *
+     *  @return true if all tiles should be currently clickable, false otherwise
+     */
+    fun isTileClickable() : Boolean {
+        return isGameActive && areTilesClickable
+    }
+
+    /**
      * Handles all logic that follows any tile click
      *
      * @param[index] Tile index
@@ -152,11 +163,13 @@ class GameController () {
         if (sequence[pointer] == index) {
             pointer += 1
             if (pointer >= sequence.size) {
+                areTilesClickable = false
                 CoroutineScope(Dispatchers.Main).launch {
                     // Before extending the sequence, wait for text to display and for all animations to end
                     delay(2*animationDuration)
                     pointer = 0
                     newRandom()
+                    areTilesClickable = true
                 }
             }
         } else {

@@ -64,7 +64,7 @@ fun Game(onEndGame: () -> Unit) {
                 .clip(RoundedCornerShape(16.dp))
                 .background(colorAnimation)
                 .clickable(
-                    enabled = controller.isGameActive,
+                    enabled = controller.isTileClickable(),
                     onClick = { controller.tileClickHandler(index) }
                 )
         )
